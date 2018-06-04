@@ -7,14 +7,16 @@
 
 (defn home-page
   []
-  (let [trke (db/get-all-races)]
+  (let [races (db/get-all-races)]
     (page/html5
      [:h1 "Spisak svih trka"]
      [:a {:href "/add-race"} "Dodaj trku"]
      [:table 
-      [:tr [:th "id"] [:th "naziv"] [:th "dan"] [:th "mesec"] [:th "godina"] [:th "email"] [:th "opis"] ]
-      (for [trka trke]
-        [:tr [:td (:id trka)] [:td (:naziv trka)]  [:td (:dan trka)] [:td (:mesec trka)] [:td (:godina trka)] [:td (:email trka)] [:td (:opis trka)]])])))
+      [:tr [:th "id"] [:th "naziv"] [:th "dan"] [:th "mesec"] [:th "godina"] [:th "email"] [:th "opis"] [:th "akcije"]]
+      (for [race races]
+        [:tr [:td (:id race)] [:td (:naziv race)]  [:td (:dan race)] [:td (:mesec race)] [:td (:godina race)] [:td (:email race)] [:td (:opis race)]
+              [:td [:a {:href (str "/edit-race/" (:id race))} "Izmeni"]]
+              ])])))
 
 (defn add-race-page
   []
@@ -35,4 +37,28 @@
   (db/add-race naziv dan mesec godina email opis)
     (page/html5
      [:h1 "Dodata trka"]
+     [:a {:href "/races"} "Sve trke"]))
+
+(defn edit-race-page
+  [id]
+  (let [race (first (db/get-race-by-id id))]
+    (page/html5
+     [:h1 "Izmena trke"]
+     [:table
+      [:form {:action "/edit-race" :method "POST"}
+        (util/anti-forgery-field) 
+        [:p "id: " [:input {:type "number" :name "id" :value (:id race) }]]
+        [:p "naziv: " [:input {:type "text" :name "naziv" :value (:naziv race) }]]
+        [:p "dan: " [:input {:type "number" :name "dan" :value (:dan race) }]]
+        [:p "mesec: " [:input {:type "number" :name "mesec" :value (:mesec race) }]]
+        [:p "godina: " [:input {:type "number" :name "godina" :value (:godina race) }]]
+        [:p "email: " [:input {:type "text" :name "email" :value (:email race) }]]
+        [:p "opis: " [:input {:type "text" :name "opis" :value (:opis race) }]]
+        [:p [:input {:type "submit" :value "Sacuvaj"}]]]])))
+
+(defn edit-race-result-page
+  [{:keys [id naziv dan mesec godina email opis]}]
+  (db/edit-race id naziv dan mesec godina email opis)
+    (page/html5
+     [:h1 "Izmenjena trka"]
      [:a {:href "/races"} "Sve trke"]))
