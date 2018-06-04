@@ -1,0 +1,3 @@
+2018-06-04 13:47:39 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "RACES" not found; SQL statement:
+select * from races [42102-193]

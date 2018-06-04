@@ -2,15 +2,19 @@
   (:require 
             [clojure.string :as str]
             [hiccup.page :as page]
+            [clojure-marathon.db :as db]
             [ring.util.anti-forgery :as util]))
 
 (defn home-page
   []
-  (page/html5
-    [:h1 "Spisak svih trka"]
-    [:a {:href "/add-race"} "Dodaj trku"]
-    [:table
-      [:tr [:th "id"] [:th "naziv"] [:th "dan"] [:th "mesec"] [:th "godina"] [:th "email"] [:th "opis"]]]))
+  (let [trke (db/get-all-races)]
+    (page/html5
+     [:h1 "Spisak svih trka"]
+     [:a {:href "/add-race"} "Dodaj trku"]
+     [:table 
+      [:tr [:th "id"] [:th "naziv"] [:th "dan"] [:th "mesec"] [:th "godina"] [:th "email"] [:th "opis"] ]
+      (for [trka trke]
+        [:tr [:td (:id trka)] [:td (:naziv trka)]  [:td (:dan trka)] [:td (:mesec trka)] [:td (:godina trka)] [:td (:email trka)] [:td (:opis trka)]])])))
 
 (defn add-race-page
   []

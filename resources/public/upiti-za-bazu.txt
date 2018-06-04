@@ -1,0 +1,20 @@
+(jdbc/db-do-commands db-spec
+                     (jdbc/create-table-ddl :races
+                         [[:id "bigint primary key auto_increment"]
+                          [:naziv "varchar(32)"]
+                          [:dan "int"]
+                          [:mesec "int"]
+                          [:godina "int"]
+                          [:email "varchar(32)"]
+                          [:opis "varchar(32)"]]))
+
+(jdbc/insert! db-spec :races
+  {:naziv "Banjalucki polumaraton" :dan "12" :mesec "5" :godina "2018" :email "banjaluckipolumaraton@gmail.com" :opis "Opis trke"})
+
+(jdbc/query db-spec ["select * from races"])
+
+
+
+
+
+
