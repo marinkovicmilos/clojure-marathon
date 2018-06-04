@@ -11,3 +11,8 @@
   []
   (jdbc/query db-spec ["select * from races"]))
 
+(defn add-race
+  [naziv dan mesec godina email opis]
+  (jdbc/insert! db-spec :races {:naziv naziv :dan dan :mesec mesec :godina godina :email email :opis opis}))
+
+

@@ -30,4 +30,9 @@
     [:p "opis: " [:input {:type "text" :name "opis"}]]
     [:p [:input {:type "submit" :value "Sacuvaj"}]]]))
 
-
+(defn add-race-result-page
+  [{:keys [naziv dan mesec godina email opis]}]
+  (db/add-race naziv dan mesec godina email opis)
+    (page/html5
+     [:h1 "Dodata trka"]
+     [:a {:href "/races"} "Sve trke"]))
