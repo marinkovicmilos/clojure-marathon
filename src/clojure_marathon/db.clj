@@ -23,5 +23,9 @@
   [id]
   (jdbc/query db-spec ["select * from races where id = ?" id]))
 
+(defn delete-race
+  [id]
+  (jdbc/delete! db-spec :races ["id = ?" id]))
+
 
 

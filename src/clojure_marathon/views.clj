@@ -16,6 +16,7 @@
       (for [race races]
         [:tr [:td (:id race)] [:td (:naziv race)]  [:td (:dan race)] [:td (:mesec race)] [:td (:godina race)] [:td (:email race)] [:td (:opis race)]
               [:td [:a {:href (str "/edit-race/" (:id race))} "Izmeni"]]
+              [:td [:a {:href (str "/delete-race/" (:id race))} "Obrisi"]]
               ])])))
 
 (defn add-race-page
@@ -61,4 +62,11 @@
   (db/edit-race id naziv dan mesec godina email opis)
     (page/html5
      [:h1 "Izmenjena trka"]
+     [:a {:href "/races"} "Sve trke"]))
+
+(defn delete-race-page
+  [id]
+  (db/delete-race id)
+    (page/html5
+     [:h1 "Obrisana trka"]
      [:a {:href "/races"} "Sve trke"]))

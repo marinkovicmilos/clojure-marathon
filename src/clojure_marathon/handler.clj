@@ -11,7 +11,7 @@
   (POST "/add-race" {params :params} (views/add-race-result-page params))
   (GET "/edit-race/:id" [id] (views/edit-race-page id))
   (POST "/edit-race" {params :params} (views/edit-race-result-page params))
-  (GET "/delete-race/:id" [id] (str "Obrisi trku " id))
+  (GET "/delete-race/:id" [id] (views/delete-race-page id))
   (route/not-found "Not Found"))
 
 (def app
