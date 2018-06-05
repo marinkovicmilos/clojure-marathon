@@ -13,6 +13,8 @@
   (POST "/edit-race" {params :params} (views/edit-race-result-page params))
   (GET "/delete-race/:id" [id] (views/delete-race-page id))
   (GET "/runners-list/:id" [id] (views/runners-list-page id))
+  (GET "/add-runner/:id" [id] (views/add-runner-page id))
+  (POST "/add-runner" {params :params} (views/add-runner-result-page params))
   (route/not-found "Not Found"))
 
 (def app

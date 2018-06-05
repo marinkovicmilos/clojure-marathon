@@ -77,11 +77,31 @@
   (let [runners (db/get-all-runners-for-race id)]
     (page/html5
      [:h1 "Spisak trkaca"]
-     [:a {:href "/add-runner"} "Dodaj trkaca"]
+     [:a {:href (str "/add-runner/" id)} "Dodaj trkaca"]
      [:a {:href "/races"} "Sve trke"]
      [:table 
-      [:tr [:th "id"] [:th "ime"] [:th "prezime"] [:th "age"] [:th "broj"] [:th "email"] [:th "trka"]]
+      [:tr [:th "id"] [:th "ime"] [:th "prezime"] [:th "age"] [:th "startni broj"] [:th "email"] [:th "trka"] [:th "akcije"]]
       (for [runner runners]
         [:tr [:td (:id runner)] [:td (:ime runner)]  [:td (:prezime runner)] [:td (:age runner)] [:td (:broj runner)] [:td (:email runner)] [:td (:trka runner)]])])))
 
+(defn add-runner-page
+  [race]
+  (page/html5
+   [:h1 "Dodaj trkaca"]
+   [:form {:action "/add-runner" :method "POST"}
+    (util/anti-forgery-field) 
+    [:p "ime: " [:input {:type "text" :name "ime"}]]
+    [:p "prezime: " [:input {:type "text" :name "prezime"}]]
+    [:p "age: " [:input {:type "number" :name "age"}]]
+    [:p "startni broj: " [:input {:type "number" :name "broj"}]]
+    [:p "email: " [:input {:type "text" :name "email"}]]
+    [:p "trka: " [:input {:type "number" :name "trka" :value race}]]
+    [:p [:input {:type "submit" :value "Sacuvaj"}]]]))
+
+(defn add-runner-result-page
+  [{:keys [ime prezime age broj email trka]}]
+  (db/add-runner ime prezime age broj email trka)
+    (page/html5
+     [:h1 "Dodat trkac"]
+     [:a {:href "/races"} "Sve trke"]))
 

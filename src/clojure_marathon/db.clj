@@ -30,3 +30,7 @@
 (defn get-all-runners-for-race
   [id]
   (jdbc/query db-spec ["select * from runners where trka = ?" id]))
+
+(defn add-runner
+  [ime prezime age broj email trka]
+  (jdbc/insert! db-spec :runners {:ime ime :prezime prezime :age age :broj broj :email email :trka trka}))
