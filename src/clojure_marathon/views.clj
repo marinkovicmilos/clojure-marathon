@@ -17,6 +17,7 @@
         [:tr [:td (:id race)] [:td (:naziv race)]  [:td (:dan race)] [:td (:mesec race)] [:td (:godina race)] [:td (:email race)] [:td (:opis race)]
               [:td [:a {:href (str "/edit-race/" (:id race))} "Izmeni"]]
               [:td [:a {:href (str "/delete-race/" (:id race))} "Obrisi"]]
+              [:td [:a {:href (str "/runners-list/" (:id race))} "Spisak trkaca"]]
               ])])))
 
 (defn add-race-page
@@ -70,3 +71,17 @@
     (page/html5
      [:h1 "Obrisana trka"]
      [:a {:href "/races"} "Sve trke"]))
+
+(defn runners-list-page
+  [id]
+  (let [runners (db/get-all-runners-for-race id)]
+    (page/html5
+     [:h1 "Spisak trkaca"]
+     [:a {:href "/add-runner"} "Dodaj trkaca"]
+     [:a {:href "/races"} "Sve trke"]
+     [:table 
+      [:tr [:th "id"] [:th "ime"] [:th "prezime"] [:th "age"] [:th "broj"] [:th "email"] [:th "trka"]]
+      (for [runner runners]
+        [:tr [:td (:id runner)] [:td (:ime runner)]  [:td (:prezime runner)] [:td (:age runner)] [:td (:broj runner)] [:td (:email runner)] [:td (:trka runner)]])])))
+
+

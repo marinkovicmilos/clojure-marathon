@@ -15,6 +15,18 @@
 
 
 
+(jdbc/db-do-commands db-spec
+                     (jdbc/create-table-ddl :runners
+                         [[:id "bigint primary key auto_increment"]
+                          [:ime "varchar(32)"]
+                          [:prezime "varchar(32)"]
+                          [:age "int"]
+                          [:broj "int"]
+                          [:email "varchar(32)"]
+                          [:trka "int"]]))
+
+(jdbc/insert! db-spec :runners
+  {:ime "Milos" :prezime "Marinkovic" :age "26" :broj "777" :email "marinkovicmilos77@gmail.com" :trka "1"})
 
 
-
+(jdbc/query db-spec ["select * from runners"])
