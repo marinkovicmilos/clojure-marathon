@@ -76,13 +76,16 @@
   [id]
   (let [runners (db/get-all-runners-for-race id)]
     (page/html5
-     [:h1 "Spisak trkaca"]
+     [:h1 "Spisak prijavljenih"]
      [:a {:href (str "/add-runner/" id)} "Dodaj trkaca"]
      [:a {:href "/races"} "Sve trke"]
      [:table 
       [:tr [:th "id"] [:th "ime"] [:th "prezime"] [:th "age"] [:th "startni broj"] [:th "email"] [:th "trka"] [:th "akcije"]]
       (for [runner runners]
-        [:tr [:td (:id runner)] [:td (:ime runner)]  [:td (:prezime runner)] [:td (:age runner)] [:td (:broj runner)] [:td (:email runner)] [:td (:trka runner)]])])))
+        [:tr [:td (:id runner)] [:td (:ime runner)]  [:td (:prezime runner)] [:td (:age runner)] [:td (:broj runner)] [:td (:email runner)] [:td (:trka runner)]
+            [:td [:a {:href (str "/edit-runner/" (:id runner))} "Izmeni"]]
+            [:td [:a {:href (str "/delete-runner/" (:id runner))} "Obrisi"]]
+        ])])))
 
 (defn add-runner-page
   [race]
@@ -105,3 +108,33 @@
      [:h1 "Dodat trkac"]
      [:a {:href "/races"} "Sve trke"]))
 
+(defn edit-runner-page
+  [id]
+  (let [runner (first (db/get-runner-by-id id))]
+    (page/html5
+     [:h1 "Izmena trke"]
+     [:table
+      [:form {:action "/edit-runner" :method "POST"}
+        (util/anti-forgery-field) 
+        [:p "id: " [:input {:type "number" :name "id" :value (:id runner) }]]
+        [:p "ime: " [:input {:type "text" :name "ime" :value (:ime runner) }]]
+        [:p "prezime: " [:input {:type "text" :name "prezime" :value (:prezime runner) }]]
+        [:p "age: " [:input {:type "number" :name "age" :value (:age runner) }]]
+        [:p "startni broj: " [:input {:type "number" :name "broj" :value (:broj runner) }]]
+        [:p "email: " [:input {:type "text" :name "email" :value (:email runner) }]]
+        [:p "trka: " [:input {:type "number" :name "trka" :value (:trka runner) }]]
+        [:p [:input {:type "submit" :value "Sacuvaj"}]]]])))
+
+(defn edit-runner-result-page
+  [{:keys [id ime prezime age broj email trka]}]
+  (db/edit-runner id ime prezime age broj email trka)
+    (page/html5
+     [:h1 "Izmenjen trkac"]
+     [:a {:href "/races"} "Sve trke"]))
+
+(defn delete-runner-page
+  [id]
+  (db/delete-runner id)
+    (page/html5
+     [:h1 "Izbrisan trkac"]
+     [:a {:href "/races"} "Sve trke"]))

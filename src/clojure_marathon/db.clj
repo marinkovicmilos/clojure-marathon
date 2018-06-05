@@ -34,3 +34,15 @@
 (defn add-runner
   [ime prezime age broj email trka]
   (jdbc/insert! db-spec :runners {:ime ime :prezime prezime :age age :broj broj :email email :trka trka}))
+
+(defn edit-runner
+  [id ime prezime age broj email trka]
+   (jdbc/update! db-spec :runners {:ime ime :prezime prezime :age age :broj broj :email email :trka trka} ["id = ?" id]))
+
+(defn get-runner-by-id
+  [id]
+  (jdbc/query db-spec ["select * from runners where id = ?" id]))
+
+(defn delete-runner
+  [id]
+  (jdbc/delete! db-spec :runners ["id = ?" id]))

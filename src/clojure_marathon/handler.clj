@@ -15,6 +15,9 @@
   (GET "/runners-list/:id" [id] (views/runners-list-page id))
   (GET "/add-runner/:id" [id] (views/add-runner-page id))
   (POST "/add-runner" {params :params} (views/add-runner-result-page params))
+  (GET "/edit-runner/:id" [id] (views/edit-runner-page id))
+  (POST "/edit-runner" {params :params} (views/edit-runner-result-page params))
+  (GET "/delete-runner/:id" [id] (views/delete-runner-page id))
   (route/not-found "Not Found"))
 
 (def app
